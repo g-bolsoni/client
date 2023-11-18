@@ -1,12 +1,9 @@
-import './App.css';
-import { Join } from './components/CreateButton';
+import { Join } from "../components/CreateButton";
 
-function App() {
+export const Home: React.FC = () => {
   return (
     <div className=" bg-slate-900 flex items-center justify-center w-screen h-screen">
         <Join/>
     </div>
   );
 }
-
-export default App;
