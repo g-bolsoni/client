@@ -16,6 +16,7 @@ interface RoomProviderProps {
 export const RoomProvider: React.FunctionComponent<RoomProviderProps> = ({ children }) => {
     const navigate = useNavigate();
     const [ me, setMe ] = useState<Peer>(); //represent our current peer
+    const [stream, setStream ] = useState<MediaStream>();
 
 
     const enterRoom = ( { roomId }: { roomId: "string"}) => {
@@ -35,14 +36,42 @@ export const RoomProvider: React.FunctionComponent<RoomProviderProps> = ({ child
         const peer =  new Peer(meId);
         setMe(peer);
 
+
+        try {
+            navigator.mediaDevices.getUserMedia({video: true, audio:true})
+            .then((stream) => {
+                setStream(stream);
+            })
+        } catch (error) {
+            console.log('qui');
+
+            console.error(error);
+        }
+
         ws.on('room-created', enterRoom)
         ws.on('get-users', getUsers)
 
 
     }, []);
 
+    useEffect(()=> {
+        if(!me) return;
+        if(!stream) return;
+
+        ws.on('user-joined', ({ peerId }) => {
+            const call = me.call(peerId, stream);
+
+
+        })
+
+        me.on('call', (call) => {
+            call.answer(stream);
+        })
+
+    }, [me, stream])
+
     return(
-        <RoomContext.Provider value={{ ws, me }}>
+        <RoomContext.Provider value={{ ws, me, stream }}>
             { children }
         </RoomContext.Provider>
     )

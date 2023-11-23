@@ -1,10 +1,11 @@
 import { useContext, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { RoomContext } from "../context/RoomContext";
+import { VideoPlayer } from "../components/VideoPlayer";
 
 export const Room = () => {
     const { id } = useParams();
-    const { ws, me } = useContext(RoomContext);
+    const { ws, me, stream } = useContext(RoomContext);
 
     useEffect(() => {
 
@@ -14,6 +15,7 @@ export const Room = () => {
     return (
         <p className="text-black">
             Room id is: <span className="font-semibold">{id}</span>
+            <VideoPlayer stream={stream} />
         </p>
     );
 }
