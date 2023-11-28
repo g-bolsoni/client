@@ -18,6 +18,7 @@ export const Room = () => {
             <p className="text-black">
                 Room id is: <span className="font-semibold">{id}</span>
             </p>
+
             <div className="grid grid-cols-4 gap-4">
                 <VideoPlayer stream={stream} />
                 {Object.values(peers as PeerState).map( peer => (

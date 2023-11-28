@@ -32,7 +32,7 @@ export const RoomProvider: React.FunctionComponent<RoomProviderProps> = ({ child
         console.log(participants);
     }
 
-    const removePeer =(peerId: string ) => {
+    const removePeer = (peerId: string ) => {
         dispatch(removePeerAction(peerId));
     }
 
@@ -46,11 +46,19 @@ export const RoomProvider: React.FunctionComponent<RoomProviderProps> = ({ child
         try {
             navigator.mediaDevices.enumerateDevices()
                 .then(devices => {
+                    let objetctConfig = {
+                        video : false,
+                        audio: false
+                    }
+
                     const hasVideoDevice = devices.some(device => device.kind === 'videoinput');
                     const hasAudioDevice = devices.some(device => device.kind === 'audioinput');
 
+                    if(hasVideoDevice) objetctConfig.video = true;
+                    if(hasAudioDevice) objetctConfig.audio = true;
+
                     if (hasVideoDevice || hasAudioDevice) {
-                        navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+                        navigator.mediaDevices.getUserMedia(objetctConfig)
                             .then((stream) => {
                                 setStream(stream);
                             })
